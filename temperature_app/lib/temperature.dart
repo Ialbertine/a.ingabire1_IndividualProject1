@@ -8,55 +8,55 @@ class TemperatureScreen extends StatefulWidget {
 }
 
 class _TemperatureScreenState extends State<TemperatureScreen> {
-  bool isFahrenheitToCelsius = true; // Toggle between F to C and C to F
+  bool isFahrenheitToCelsius = true; // to choose between F to C and C to F
   final TextEditingController _temperatureController = TextEditingController(); // Controller for input field
-  String _result = ''; // Stores the result of conversion
-  List<String> _history = []; // Stores the history of conversions
+  String _result = ''; // this is where the result of conversion will be stored.
+  List<String> _history = []; // this is the history of conversions will be stored. 
 
-// Method to clear the input and reset state
-void _clear() {
-  _temperatureController.clear(); 
-  setState(() {
-    _result = ''; 
-    _history.clear(); 
-  });
-}
-
+  // function to clear the input and reset state
+  void _clear() {
+    _temperatureController.clear(); 
+    setState(() {
+      _result = ''; 
+      _history.clear(); 
+    });
+  }
 
   // Method to handle conversion logic
   void _convertTemperature() {
     if (_temperatureController.text.isEmpty) return; // Ensure input is provided
 
     double inputTemp = double.parse(_temperatureController.text); // Parse input to double
-    double convertedTemp; // Variable to store the converted temperature
+    double convertedTemp; // Variable that store the converted temperature
     String operation; // To track if conversion is F to C or C to F
 
     if (isFahrenheitToCelsius) {
-      convertedTemp = _fahrenheitToCelsius(inputTemp); // Convert F to C
+      convertedTemp = _fahrenheitToCelsius(inputTemp); // Convert Fahrenheit to Celsius
       operation = 'F to C'; 
     } else {
-      convertedTemp = _celsiusToFahrenheit(inputTemp); // Convert C to F
+      convertedTemp = _celsiusToFahrenheit(inputTemp); // Convert Celsius to Fahrenheit
       operation = 'C to F'; 
     }
 
     // Update the result and history
     setState(() {
       _result = convertedTemp.toStringAsFixed(2); // Format result to two decimal places
-      _history.insert(0, '$operation: ${inputTemp.toStringAsFixed(1)} => $_result'); // Add to history
+      _history.insert(0, '$operation : ${inputTemp.toStringAsFixed(1)} = $_result'); // Add to history
     });
   }
 
-  // Fahrenheit to Celsius conversion logic
+  // Fahrenheit to Celsius conversion
   double _fahrenheitToCelsius(double fahrenheit) {
     return (fahrenheit - 32) * 5 / 9;
   }
 
-  // Celsius to Fahrenheit conversion logic
+  // Celsius to Fahrenheit conversion
   double _celsiusToFahrenheit(double celsius) {
     return celsius * 9 / 5 + 32;
   }
 
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: OrientationBuilder(
@@ -81,7 +81,7 @@ void _clear() {
                         child: Column(
                           children: [
                             RadioListTile<bool>(
-                              title: Text('°F to °C',
+                              title: Text('Fahrenheit to Celsius',
                                 style: TextStyle(
                                   fontSize: 18,
                                 ),
@@ -93,7 +93,7 @@ void _clear() {
                               },
                             ),
                             RadioListTile<bool>(
-                              title: Text('°C to °F',
+                              title: Text('Celsius to Fahrenheit',
                                 style: TextStyle(
                                   fontSize: 18,
                                 ),
@@ -125,15 +125,15 @@ void _clear() {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children:[
                       ElevatedButton(
-                      onPressed: _convertTemperature, 
-                      child: Text('Convert', style: TextStyle(fontSize: 16)),
-                      style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 209, 219, 209),
-                      shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                        onPressed: _convertTemperature, 
+                        child: Text('Convert', style: TextStyle(fontSize: 16)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(255, 209, 219, 209),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
                       ),
-                      ),
-                     ),
 
                       ElevatedButton(
                         onPressed: _clear,
@@ -148,7 +148,7 @@ void _clear() {
                     ] 
                   ),
                   SizedBox(height: 16),
-                
+
                   // Result Display
                   Text(
                     'Result: $_result ${isFahrenheitToCelsius ? '°C' : '°F'}',
@@ -167,15 +167,22 @@ void _clear() {
                   ),
                   SizedBox(height: 8),
 
-                  // Display history as a list
+                  // Display history as a list of cards
                   SizedBox(
                     height: orientation == Orientation.portrait ? 200 : 100,
                     child: ListView.builder(
                       itemCount: _history.length,
                       itemBuilder: (context, index) {
-                        return Text(
-                          _history[index],
-                          style: TextStyle(fontSize: 18), // Increased font size for history
+                        return Card(
+                          elevation: 2,
+                          margin: EdgeInsets.symmetric(vertical: 5),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              _history[index],
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
                         );
                       },
                     ),
